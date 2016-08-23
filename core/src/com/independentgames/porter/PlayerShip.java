@@ -16,6 +16,7 @@ public class PlayerShip
     private Texture tiles;
     private TextureRegion[][] grid;
     private TextureRegion[][] tinyGrid;
+    private TextureRegion[][] barGrid;
     private TextureRegion ship;
     private TextureRegion slowEngine;
     private TextureRegion medEngine;
@@ -23,6 +24,8 @@ public class PlayerShip
     private TextureRegion slowEngineReversed;
     private TextureRegion medEngineReversed;
     private TextureRegion fastEngineReversed;
+    private TextureRegion fuelOutline;
+    private TextureRegion fuelBar;
     private TextureRegion weaponFire;
     private TextureRegion gotHit;
     private int windowHeight;
@@ -32,23 +35,28 @@ public class PlayerShip
     private Animation slowDown;
     private Animation flyNormal;
 
+    private float fuel;
     private int score;
-    private int health;
+    private float ratio;
     private boolean damage;
     private boolean isAlive;
 
-    private static int CYCLES = 1000;
+    public static float TANK_SIZE = 500f;
 
 
     public void create () {
 
         tiles = new Texture(MyGdxGame.ASSET_DIRECTORY + "ParsecTiles.png");
+        barGrid = TextureRegion.split(tiles, MyGdxGame.WIDTH, MyGdxGame.HEIGHT / 2);
         tinyGrid = TextureRegion.split(tiles, MyGdxGame.WIDTH / 2, MyGdxGame.HEIGHT);
         grid = TextureRegion.split(tiles, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
         ship = grid[0][0];
         slowEngine = tinyGrid[1][0];
         medEngine = tinyGrid[1][1];
         fastEngine = tinyGrid[2][0];
+        fuelOutline = barGrid[1][1];
+        fuelOutline.setRegionHeight(12);
+        fuelBar = barGrid[0][1];
         slowEngineReversed = new TextureRegion(slowEngine);
         slowEngineReversed.flip(false, true);
         medEngineReversed = new TextureRegion(medEngine);
@@ -59,6 +67,8 @@ public class PlayerShip
         speedUp = new Animation(.15f, fastEngine, fastEngineReversed);
         flyNormal = new Animation(.15f, medEngine, medEngineReversed);
 
+
+        fuel= TANK_SIZE;
         score = 0;
         damage = false;
         isAlive = true;
@@ -86,21 +96,29 @@ public class PlayerShip
     {
         if (Gdx.input.isKeyPressed(Input.Keys.UP))
         {
-                yv = MyGdxGame.MAX_VELOCITY;
+            yv = MyGdxGame.MAX_VELOCITY;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
         {
-                yv = -MyGdxGame.MAX_VELOCITY;
+            yv = -MyGdxGame.MAX_VELOCITY;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
         {
-                xv = MyGdxGame.MAX_VELOCITY;
+            xv = MyGdxGame.MAX_VELOCITY;
+            fuel = fuel - .5f;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
         {
-                xv = -MyGdxGame.MAX_VELOCITY;
+            xv = -MyGdxGame.MAX_VELOCITY;
+            fuel = fuel - .1f;
         }
+        else
+        {
+            fuel = fuel - .2f;
+        }
+
+        ratio = fuel/TANK_SIZE;
 
         float delta = Gdx.graphics.getDeltaTime();
         y+= yv * delta;
@@ -113,20 +131,20 @@ public class PlayerShip
 
         if (x<0)
         {
-            x = windowWidth;
+            x = 0;
         }
-        if (x>(windowWidth-MyGdxGame.WIDTH))
+        if (x>(windowWidth-(MyGdxGame.WIDTH*MyGdxGame.SCALE_MULTIPLIER)))
         {
             x = windowWidth-(MyGdxGame.WIDTH*MyGdxGame.SCALE_MULTIPLIER);
         }
 
-        if (y<(-MyGdxGame.HEIGHT*MyGdxGame.SCALE_MULTIPLIER))
+        if (y<0)
         {
-            y = windowHeight;
+            y = 0;
         }
-        if (y>(windowHeight))
+        if (y>(windowHeight-(MyGdxGame.HEIGHT*MyGdxGame.SCALE_MULTIPLIER)))
         {
-            y = -(MyGdxGame.HEIGHT*MyGdxGame.SCALE_MULTIPLIER);
+            y = windowHeight-(MyGdxGame.HEIGHT*MyGdxGame.SCALE_MULTIPLIER);
         }
 
     }
@@ -185,11 +203,6 @@ public class PlayerShip
         return score;
     }
 
-    public int getHealth()
-    {
-        return health;
-    }
-
     public TextureRegion getHitTile()
     {
         return gotHit;
@@ -198,11 +211,28 @@ public class PlayerShip
     {
         return damage;
     }
+    public float getFuel()
+    {
+        return fuel;
+    }
 
     public boolean isAlive()
     {
         return isAlive;
     }
 
+    public TextureRegion getFuelBar()
+    {
+        return fuelBar;
+    }
 
+    public TextureRegion getFuelOutline()
+    {
+        return fuelOutline;
+    }
+
+    public float getRatio()
+    {
+        return ratio;
+    }
 }

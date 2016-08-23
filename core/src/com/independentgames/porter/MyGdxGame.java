@@ -18,9 +18,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	static final String ASSET_DIRECTORY = "core/assets/";
 	static final int WIDTH = 32;
 	static final int HEIGHT = 16;
-	static final float MAX_VELOCITY = 100f;
+	static final float MAX_VELOCITY = 200f;
 	static final float DECLERATION_RATE = 0.5f;
-	static final float SCALE_MULTIPLIER = 3f;
+	static final float SCALE_MULTIPLIER = 2f;
 	static final float STOP_THRESHHOLD = 5f;
 	static final float AGGRO_RANGE = 100f;
 	static final float PROXIMITY_TOUCHING = 32f;
@@ -59,16 +59,20 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		time += Gdx.graphics.getDeltaTime();
 		TextureRegion speed = ship.animationTile(time);
 		TextureRegion craft = ship.getShipTile();
+		TextureRegion bar = ship.getFuelBar();
+		TextureRegion outline = ship.getFuelOutline();
 		ship.moveShip();
-		Gdx.gl.glClearColor(0.5f, 0.65f, 0.5f, 0.5f);
+		Gdx.gl.glClearColor(.1f, .1f, .1f, .25f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
 		batch.begin();
-		batch.draw(craft, ship.getX(), ship.getY());
-		batch.draw(speed, (ship.getX()-(WIDTH/2)), ship.getY());
+		batch.draw(craft, ship.getX(), ship.getY(), WIDTH * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
+		batch.draw(speed, (ship.getX() - (WIDTH/2*SCALE_MULTIPLIER)), ship.getY(),(WIDTH/2) * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
+		batch.draw(outline, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
+		batch.draw(bar, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER * ship.getRatio(), HEIGHT * SCALE_MULTIPLIER);
 		batch.end();
 	}
 	
