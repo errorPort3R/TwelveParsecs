@@ -43,7 +43,7 @@ public class PlayerShip
     private boolean damage;
     private boolean isAlive;
 
-    public static float TANK_SIZE = 500f;
+    public static float TANK_SIZE = 10000f;
 
 
     public void create () {
