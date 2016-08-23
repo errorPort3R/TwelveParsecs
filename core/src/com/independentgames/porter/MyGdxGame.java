@@ -73,8 +73,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		batch.begin();
 		batch.draw(craft, ship.getX(), ship.getY(), WIDTH * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
 		batch.draw(speed, (ship.getX() - (WIDTH/2*SCALE_MULTIPLIER)), ship.getY(),(WIDTH/2) * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
-		batch.draw(outline, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
-		batch.draw(bar, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER * ship.getRatio(), HEIGHT * SCALE_MULTIPLIER);
+		batch.draw(outline, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER, HEIGHT);
+		batch.draw(bar, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER * ship.getRatio(), HEIGHT);
 		batch.draw(fuelLabel, 50, (Gdx.graphics.getHeight() - 58), WIDTH * SCALE_MULTIPLIER, HEIGHT);
 		batch.end();
 	}
