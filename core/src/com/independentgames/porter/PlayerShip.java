@@ -24,8 +24,10 @@ public class PlayerShip
     private TextureRegion slowEngineReversed;
     private TextureRegion medEngineReversed;
     private TextureRegion fastEngineReversed;
+    private TextureRegion deadStick;
     private TextureRegion fuelOutline;
     private TextureRegion fuelBar;
+    private TextureRegion label;
     private TextureRegion weaponFire;
     private TextureRegion gotHit;
     private int windowHeight;
@@ -54,9 +56,10 @@ public class PlayerShip
         slowEngine = tinyGrid[1][0];
         medEngine = tinyGrid[1][1];
         fastEngine = tinyGrid[2][0];
+        deadStick = tinyGrid[2][1];
         fuelOutline = barGrid[1][1];
-        fuelOutline.setRegionHeight(12);
         fuelBar = barGrid[0][1];
+        label = barGrid[2][1];
         slowEngineReversed = new TextureRegion(slowEngine);
         slowEngineReversed.flip(false, true);
         medEngineReversed = new TextureRegion(medEngine);
@@ -77,48 +80,58 @@ public class PlayerShip
     public TextureRegion animationTile(float time)
     {
         TextureRegion img;
-        if (xv<0)
+        if (fuel>0)
         {
-            img = slowDown.getKeyFrame(time, true);
-        }
-        else if (xv>0)
-        {
-            img = speedUp.getKeyFrame(time, true);
+            if (xv < 0)
+            {
+                img = slowDown.getKeyFrame(time, true);
+            } else if (xv > 0)
+            {
+                img = speedUp.getKeyFrame(time, true);
+            } else
+            {
+                img = flyNormal.getKeyFrame(time, true);
+            }
         }
         else
         {
-            img = flyNormal.getKeyFrame(time, true);
+            img = deadStick;
         }
         return img;
     }
 
     public void moveShip()
     {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))
+        if(fuel>0)
         {
-            yv = MyGdxGame.MAX_VELOCITY;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-        {
-            yv = -MyGdxGame.MAX_VELOCITY;
-        }
+            if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            {
+                yv = MyGdxGame.MAX_VELOCITY;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            {
+                yv = -MyGdxGame.MAX_VELOCITY;
+            }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-        {
-            xv = MyGdxGame.MAX_VELOCITY;
-            fuel = fuel - .5f;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-        {
-            xv = -MyGdxGame.MAX_VELOCITY;
-            fuel = fuel - .1f;
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            {
+                xv = MyGdxGame.MAX_VELOCITY;
+                fuel = fuel - .5f;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            {
+                xv = -MyGdxGame.MAX_VELOCITY;
+                fuel = fuel - .1f;
+            } else
+            {
+                fuel = fuel - .2f;
+            }
         }
         else
         {
-            fuel = fuel - .2f;
+            fuel = 0;
+            yv = -MyGdxGame.MAX_VELOCITY;
         }
 
-        ratio = fuel/TANK_SIZE;
+                    ratio = fuel/TANK_SIZE;
 
         float delta = Gdx.graphics.getDeltaTime();
         y+= yv * delta;
@@ -234,5 +247,10 @@ public class PlayerShip
     public float getRatio()
     {
         return ratio;
+    }
+
+    public TextureRegion getLabel()
+    {
+        return label;
     }
 }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	static final String ASSET_DIRECTORY = "core/assets/";
@@ -61,6 +62,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		TextureRegion craft = ship.getShipTile();
 		TextureRegion bar = ship.getFuelBar();
 		TextureRegion outline = ship.getFuelOutline();
+		TextureRegion fuelLabel = ship.getLabel();
 		ship.moveShip();
 		Gdx.gl.glClearColor(.1f, .1f, .1f, .25f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -73,6 +75,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		batch.draw(speed, (ship.getX() - (WIDTH/2*SCALE_MULTIPLIER)), ship.getY(),(WIDTH/2) * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
 		batch.draw(outline, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
 		batch.draw(bar, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER * ship.getRatio(), HEIGHT * SCALE_MULTIPLIER);
+		batch.draw(fuelLabel, 50, (Gdx.graphics.getHeight() - 58), WIDTH * SCALE_MULTIPLIER, HEIGHT);
 		batch.end();
 	}
 	
