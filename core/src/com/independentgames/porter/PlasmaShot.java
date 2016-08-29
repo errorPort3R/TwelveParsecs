@@ -68,9 +68,6 @@ public class PlasmaShot
     {
         return y;
     }
-
-
-
 }
 
 
