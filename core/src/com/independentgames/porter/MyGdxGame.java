@@ -57,12 +57,17 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		{
 			Gdx.app.exit();
 		}
+		if (Gdx.input.isKeyPressed((Input.Keys.SPACE)))
+		{
+
+		}
 		time += Gdx.graphics.getDeltaTime();
 		TextureRegion speed = ship.animationTile(time);
 		TextureRegion craft = ship.getShipTile();
 		TextureRegion bar = ship.getFuelBar();
 		TextureRegion outline = ship.getFuelOutline();
 		TextureRegion fuelLabel = ship.getLabel();
+		TextureRegion plasmashot =
 		ship.moveShip();
 		Gdx.gl.glClearColor(.1f, .1f, .1f, .25f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -76,6 +81,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		batch.draw(outline, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER, HEIGHT);
 		batch.draw(bar, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER * ship.getRatio(), HEIGHT);
 		batch.draw(fuelLabel, 50, (Gdx.graphics.getHeight() - 58), WIDTH * SCALE_MULTIPLIER, HEIGHT);
+		batch.draw(plasmashot, )
 		batch.end();
 	}
 	

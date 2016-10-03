@@ -45,7 +45,7 @@ public class PlasmaShot
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
         {
-            xv = MyGdxGame.MAX_VELOCITY * 5;
+            xv = MyGdxGame.MAX_VELOCITY * 3;
         }
 
         float delta = Gdx.graphics.getDeltaTime();
