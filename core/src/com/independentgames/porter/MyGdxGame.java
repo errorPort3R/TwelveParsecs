@@ -15,6 +15,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
+import java.util.ArrayList;
+
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	static final String ASSET_DIRECTORY = "core/assets/";
 	static final int WIDTH = 32;
@@ -28,12 +30,14 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	SpriteBatch batch;
 	Texture img;
 
+	ArrayList<PlasmaShot> shots;
 	PlayerShip ship;
 	float time;
 
 	TiledMap tiledMap;
 	OrthographicCamera camera;
 	TiledMapRenderer tiledMapRenderer;
+	PlasmaShot shot;
 
 
 	@Override
@@ -52,14 +56,29 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 	}
 
 	@Override
-	public void render () {
+	public void render ()
+	{
+
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 		{
 			Gdx.app.exit();
 		}
 		if (Gdx.input.isKeyPressed((Input.Keys.SPACE)))
 		{
-
+			shot = new PlasmaShot();
+			shot.create(ship.getX(), ship.getY());
+			shots.add(shot);
+		}
+		if(shots != null)
+		{
+			for (PlasmaShot s : shots)
+			{
+				if (s.getX() == Gdx.graphics.getWidth() + 150)
+				{
+					shots.remove(s);
+				}
+			}
+			batch.end();
 		}
 		time += Gdx.graphics.getDeltaTime();
 		TextureRegion speed = ship.animationTile(time);
@@ -67,8 +86,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		TextureRegion bar = ship.getFuelBar();
 		TextureRegion outline = ship.getFuelOutline();
 		TextureRegion fuelLabel = ship.getLabel();
-		TextureRegion plasmashot =
 		ship.moveShip();
+
 		Gdx.gl.glClearColor(.1f, .1f, .1f, .25f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -81,7 +100,14 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		batch.draw(outline, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER, HEIGHT);
 		batch.draw(bar, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER * ship.getRatio(), HEIGHT);
 		batch.draw(fuelLabel, 50, (Gdx.graphics.getHeight() - 58), WIDTH * SCALE_MULTIPLIER, HEIGHT);
-		batch.draw(plasmashot, )
+		if(shots != null)
+		{
+			for (PlasmaShot s : shots)
+			{
+				batch.draw(s.animationTile(time), s.getX(), s.getY());
+				s.moveShot();
+			}
+		}
 		batch.end();
 	}
 	

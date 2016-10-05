@@ -32,6 +32,8 @@ public class PlasmaShot
         shotA = grid[1][4];
         shotB = grid[1][5];
         fired = new Animation(.15f, shotA, shotB);
+        x = shipX;
+        y = shipY;
 
     }
 
@@ -43,17 +45,9 @@ public class PlasmaShot
     public void moveShot()
     {
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
-        {
-            xv = MyGdxGame.MAX_VELOCITY * 3;
-        }
-
+        xv = MyGdxGame.MAX_VELOCITY * 3;
         float delta = Gdx.graphics.getDeltaTime();
-//        y+= yv * delta;
-//        x+= xv * delta;
-//        yv = decelerate(yv);
-//        xv = decelerate(xv);
-
+        x+= xv*delta;
         windowHeight = Gdx.graphics.getHeight();
         windowWidth = Gdx.graphics.getWidth();
 
