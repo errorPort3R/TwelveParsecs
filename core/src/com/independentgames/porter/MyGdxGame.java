@@ -51,8 +51,21 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		camera.update();
 		tiledMap = new TmxMapLoader().load(ASSET_DIRECTORY + "space1.tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap,SCALE_MULTIPLIER);
+		shot = new PlasmaShot();
+		shot.create(ship.getX(), ship.getY());
 		Gdx.input.setInputProcessor(this);
 
+
+		if(shots != null)
+		{
+			for (PlasmaShot s : shots)
+			{
+				if (s.getX() == Gdx.graphics.getWidth() + 150)
+				{
+					shots.remove(s);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -65,21 +78,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		}
 		if (Gdx.input.isKeyPressed((Input.Keys.SPACE)))
 		{
-			shot = new PlasmaShot();
-			shot.create(ship.getX(), ship.getY());
 			shots.add(shot);
 		}
-		if(shots != null)
-		{
-			for (PlasmaShot s : shots)
-			{
-				if (s.getX() == Gdx.graphics.getWidth() + 150)
-				{
-					shots.remove(s);
-				}
-			}
-			batch.end();
-		}
+
 		time += Gdx.graphics.getDeltaTime();
 		TextureRegion speed = ship.animationTile(time);
 		TextureRegion craft = ship.getShipTile();
