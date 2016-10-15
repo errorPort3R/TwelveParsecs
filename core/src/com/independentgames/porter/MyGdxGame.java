@@ -51,42 +51,45 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		camera.update();
 		tiledMap = new TmxMapLoader().load(ASSET_DIRECTORY + "space1.tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap,SCALE_MULTIPLIER);
-		shot = new PlasmaShot();
-		shot.create(ship.getX(), ship.getY());
 		Gdx.input.setInputProcessor(this);
+		shots = new ArrayList<PlasmaShot>();
 
-
-		if(shots != null)
-		{
-			for (PlasmaShot s : shots)
-			{
-				if (s.getX() == Gdx.graphics.getWidth() + 150)
-				{
-					shots.remove(s);
-				}
-			}
-		}
 	}
 
 	@Override
 	public void render ()
 	{
-
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 		{
 			Gdx.app.exit();
 		}
-		if (Gdx.input.isKeyPressed((Input.Keys.SPACE)))
+		time += Gdx.graphics.getDeltaTime();
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
 		{
+			shot = new PlasmaShot();
+			shot.create(ship.getX(), ship.getY());
 			shots.add(shot);
 		}
 
-		time += Gdx.graphics.getDeltaTime();
+		for (PlasmaShot s : shots)
+		{
+			s.moveShot(time);
+			if (s.getX() ==  950)
+			{
+				shots.remove(s);
+			}
+		}
+
+
+
 		TextureRegion speed = ship.animationTile(time);
 		TextureRegion craft = ship.getShipTile();
 		TextureRegion bar = ship.getFuelBar();
 		TextureRegion outline = ship.getFuelOutline();
 		TextureRegion fuelLabel = ship.getLabel();
+
+		//TextureRegion shotdisplay = shots.get(0).animationTile(time);
+
 		ship.moveShip();
 
 		Gdx.gl.glClearColor(.1f, .1f, .1f, .25f);
@@ -101,13 +104,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 		batch.draw(outline, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER, HEIGHT);
 		batch.draw(bar, 50, (Gdx.graphics.getHeight() - 45), WIDTH * SCALE_MULTIPLIER * ship.getRatio(), HEIGHT);
 		batch.draw(fuelLabel, 50, (Gdx.graphics.getHeight() - 58), WIDTH * SCALE_MULTIPLIER, HEIGHT);
-		if(shots != null)
+
+		for (PlasmaShot s : shots)
 		{
-			for (PlasmaShot s : shots)
-			{
-				batch.draw(s.animationTile(time), s.getX(), s.getY());
-				s.moveShot();
-			}
+			batch.draw(s.tilePiece, s.getX(), s.getY());
 		}
 		batch.end();
 	}

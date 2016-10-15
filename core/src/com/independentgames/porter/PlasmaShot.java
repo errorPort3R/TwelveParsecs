@@ -15,10 +15,9 @@ public class PlasmaShot
     private TextureRegion[][] grid;
     private TextureRegion shotA;
     private TextureRegion shotB;
-    private int windowHeight;
-    private int windowWidth;
-    private float x, y, xv, yv;
+    private float x, y, xv;
     private Animation fired;
+    public static TextureRegion tilePiece;
 
 
 
@@ -28,9 +27,10 @@ public class PlasmaShot
     public void create (float shipX, float shipY)
     {
         tiles = new Texture(MyGdxGame.ASSET_DIRECTORY + "ParsecTiles.png");
-        grid = TextureRegion.split(tiles, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
-        shotA = grid[1][4];
-        shotB = grid[1][5];
+        grid = TextureRegion.split(tiles, MyGdxGame.WIDTH, (MyGdxGame.HEIGHT/2));
+        shotA = grid[1][3];
+        shotB = grid[1][4];
+        tilePiece =  new TextureRegion();
         fired = new Animation(.15f, shotA, shotB);
         x = shipX;
         y = shipY;
@@ -42,15 +42,11 @@ public class PlasmaShot
            return fired.getKeyFrame(time, true);
     }
 
-    public void moveShot()
+    public void moveShot(float time)
     {
-
-        xv = MyGdxGame.MAX_VELOCITY * 3;
-        float delta = Gdx.graphics.getDeltaTime();
-        x+= xv*delta;
-        windowHeight = Gdx.graphics.getHeight();
-        windowWidth = Gdx.graphics.getWidth();
-
+        xv = MyGdxGame.MAX_VELOCITY;
+        x+= xv*time;
+        tilePiece = fired.getKeyFrame(time);
     }
 
     public float getX()
