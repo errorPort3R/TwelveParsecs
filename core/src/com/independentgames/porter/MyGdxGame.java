@@ -73,11 +73,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
 		for (PlasmaShot s : shots)
 		{
-			s.moveShot(time);
-			if (s.getX() ==  950)
-			{
-				shots.remove(s);
-			}
+
 		}
 
 
@@ -107,7 +103,12 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
 		for (PlasmaShot s : shots)
 		{
-			batch.draw(s.tilePiece, s.getX(), s.getY());
+			s.moveShot(time);
+			if (s.getX() ==  950)
+			{
+				shots.remove(s);
+			}
+			batch.draw(s.tilePiece, s.getX(), s.getY(), WIDTH * SCALE_MULTIPLIER, HEIGHT * SCALE_MULTIPLIER);
 		}
 		batch.end();
 	}

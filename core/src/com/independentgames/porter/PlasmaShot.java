@@ -34,7 +34,6 @@ public class PlasmaShot
         fired = new Animation(.15f, shotA, shotB);
         x = shipX;
         y = shipY;
-
     }
 
     public TextureRegion animationTile(float time)
